@@ -11,7 +11,7 @@ sequenceDiagram
 
   Note left of server: The server starts executing the JavaScript code that saves the new note content (on the request's body) into the database
 
-  server-->>browser: HTTP Response 302 asking browser to redirect to location /exampleapp/notes
+  server-->>browser: HTTP Response with Status Code 302 asking browser to redirect to location /exampleapp/notes
   deactivate server
   
   browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
