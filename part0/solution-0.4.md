@@ -9,7 +9,7 @@ sequenceDiagram
   browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note with note text
   activate server
 
-  Note left of server: The server starts executing the JavaScript code that saves the new note content (on the request's body) into the database
+  Note left of server: The server starts executing the JavaScript code that saves the new note content (in the request's body) into the database
 
   server-->>browser: HTTP Response with Status Code 302 asking browser to redirect to location /exampleapp/notes
   deactivate server
