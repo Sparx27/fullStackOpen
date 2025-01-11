@@ -15,10 +15,10 @@ const Form = ({ onAddPerson }) => {
     <form onSubmit={handleSubmit}>
       <h2>Add new</h2>
       
-      <div>
+      <div style={{marginBottom: "5px"}}>
         name: <input value={newName} onChange={(e) => setNewName(e.target.value)} required />
       </div>
-      <div>
+      <div style={{marginBottom: "5px"}}>
         number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} required />
       </div>
       <div>

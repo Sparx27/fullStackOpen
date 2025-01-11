@@ -1,11 +1,16 @@
 import Person from "./Person"
 
-const Numbers = ({ personsToShow }) => {
+const Numbers = ({ personsToShow, actions }) => {
   return (
-    <>
+    <section>
       <h2>Numbers</h2>
-      {personsToShow.map(p => <Person key={p.id} data={p} />)}
-    </>
+
+      <table>
+        <tbody>
+          {personsToShow.map(p => <Person key={p.id} data={p} actions={actions} />)}
+        </tbody>
+      </table>
+    </section>
   )
 }
 
