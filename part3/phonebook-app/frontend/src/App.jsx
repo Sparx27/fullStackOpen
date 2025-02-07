@@ -15,6 +15,7 @@ const App = () => {
   useEffect(() => {
     getAllPerson()
       .then(data => setPersons(data))
+      .catch(err => showNotification(`${(err.response?.data?.message ?? 'Error fetching data')}`, 'n-error'))
   }, [])
 
   function showNotification(message, type = 'n-success') {
@@ -36,6 +37,7 @@ const App = () => {
             setPersons(persons.map(p => p.id === existPerson.id ? data : p))
             showNotification(`${newName} updated`)
           })
+          .catch(err => showNotification(`${err.response.data.message}`, 'n-error'))
     }
     else {
       const newPerson = { name: newName, number: newNumber }
@@ -44,14 +46,17 @@ const App = () => {
           setPersons([ ...persons, data ])
           showNotification(`${newName} added`)
         })
+        .catch(err => showNotification(`${err.response.data.message}`, 'n-error'))
     }
   }
 
   function onDeletePerson(id) {
     deletePerson(id)
-      .then(data => showNotification("Person deleted"))
-      .catch(error => showNotification("Error: This person does not exist in the database", 'n-error'))
-      .finally(() => setPersons(persons.filter(p => p.id != id)))
+      .then(data => {
+        showNotification("Person deleted")
+        setPersons(persons.filter(p => p.id != id))
+      })
+      .catch(err => showNotification(`${err.response.data.message}`, 'n-error'))
   }
 
   return (
