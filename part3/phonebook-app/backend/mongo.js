@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
-const [, , pass, newName, newNumber] = process.argv
+/* const [, , pass, newName, newNumber] = process.argv
 
 if(!pass || pass.length < 3) {
   console.log('Please provide the password')
   process.exit(1)
 }
 
-const connectionString = `mongodb+srv://gcnicolas2024:${pass}@cluster0.avqgn.mongodb.net/fullStackOpenPhonebook?retryWrites=true&w=majority&appName=Cluster0`
+const connectionString = `mongodb+srv://gcnicolas2024:${pass}@cluster0.avqgn.mongodb.net/fullStackOpenPhonebook?retryWrites=true&w=majority&appName=Cluster0` */
 
 mongoose.set('strictQuery', false)
 
