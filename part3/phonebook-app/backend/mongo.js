@@ -9,17 +9,30 @@ if(!pass || pass.length < 3) {
 
 const connectionString = `mongodb+srv://gcnicolas2024:${pass}@cluster0.avqgn.mongodb.net/fullStackOpenPhonebook?retryWrites=true&w=majority&appName=Cluster0` */
 
+const connectionString = process.env.MONGO_URI
+
 mongoose.set('strictQuery', false)
 
 mongoose.connect(connectionString)
+  .then(() => console.log('Mongodb connected'))
+  .catch(() => console.log('ERROR: Mongodb connection failed'))
 
 const personSchema = new mongoose.Schema({
   name: String,
   number: String
 })
-const Person = new mongoose.model('Person', personSchema)
 
-if(!newName && !newNumber) {
+personSchema.set('toJSON', {
+  transform: (doc, retObj) => {
+    retObj.id = retObj._id.toString(),
+    delete retObj._id,
+    delete retObj.__v
+  }
+})
+
+module.exports = mongoose.model('Person', personSchema)
+
+/* if(!newName && !newNumber) {
   Person.find({}).then(res => {
     console.log('phonebook:')
     res.forEach(({ name, number }) => { console.log(`${name} ${number}`) })
@@ -42,4 +55,4 @@ else {
       mongoose.connection.close()
     })
   }
-}
+} */
