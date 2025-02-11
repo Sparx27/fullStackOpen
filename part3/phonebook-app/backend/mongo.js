@@ -18,8 +18,19 @@ mongoose.connect(connectionString)
   .catch(() => console.log('ERROR: Mongodb connection failed'))
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
+  name: {
+    type: String,
+    required: [true, 'Name is required'],
+    minLength: [3, 'Name should have at least 3 characters'],
+    trim: true
+  },
+  number: {
+    type: String,
+    required: [true, 'Number is required'],
+    trim: true,
+    minLength: [8, 'Number should have at least 8 characters'],
+    validate: [(val) => /^\d{2,3}\-\d+$/.test(val), 'Malformed number']
+  }
 })
 
 personSchema.set('toJSON', {

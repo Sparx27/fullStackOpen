@@ -59,10 +59,9 @@ app.get('/api/persons/:id', (req, res, next) => Person.findById(req.params.id).t
 
 app.post('/api/persons', (req, res, next) => {
   const { body } = req
-  if(!body || !body.name || !body.number) return res.status(400).send({ message: 'Content missing' })
+  //if(!body || !body.name || !body.number) return res.status(400).send({ message: 'Content missing' })
 
   Person.find({ name: body.name }).then(result => {
-    console.log(result, 'LENGTH ', result.length)
     if(result.length > 0) return res.status(409).json({ message: "Name already exists" })
 
     const newPerson = new Person({
@@ -72,7 +71,10 @@ app.post('/api/persons', (req, res, next) => {
 
     newPerson.save()
       .then(result => res.status(201).json(result))
-      .catch(err => next(err))
+      .catch(err => {
+        const { message } = err
+        res.status(400).json({ message: message?.substring(message.lastIndexOf(':') + 1) || 'Error saving Person' })
+      })
   })})
 
 app.delete('/api/persons/:id', (req, res) => Person.findByIdAndDelete(req.params.id)
@@ -83,9 +85,15 @@ app.put('/api/persons/:id', (req, res, next) => {
   if(!req.body || !req.body.name || !req.body.number) return res.status(400).json({ message: 'Content missing' })
 
   const { name, number } = req.body
-  Person.findByIdAndUpdate(req.params.id, { name, number }, { new: true })
+  Person.findByIdAndUpdate(req.params.id, { name, number }, {
+    new: true,
+    runValidators: true
+  })
     .then(updatedPerson => res.json(updatedPerson))
-    .catch(err => next(err))
+    .catch(err => {
+      const { message } = err
+      res.status(400).json({ message: message?.substring(message.lastIndexOf(':') + 1) || 'Error updating Person' })
+    })
 })
 
 const unknownEndpoint = (req, res) => res.status(404).json({ message: `ERROR: unknown endpoint: ${req.path}`})
