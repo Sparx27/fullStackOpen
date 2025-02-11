@@ -36,7 +36,7 @@ const app = express()
 app.use(express.json())
 app.use(express.static('dist'))
 
-morgan.token('body', (req, res) => req.method === "POST" ? JSON.stringify(req.body) : ' ')
+morgan.token('body', (req) => req.method === "POST" ? JSON.stringify(req.body) : ' ')
 app.use(morgan(':method :url :status :response-time :body'))
 
 app.get('/info', (req, res, next) => {
@@ -57,7 +57,7 @@ app.get('/api/persons/:id', (req, res, next) => Person.findById(req.params.id).t
 })
   .catch(err => next(err)))
 
-app.post('/api/persons', (req, res, next) => {
+app.post('/api/persons', (req, res) => {
   const { body } = req
   //if(!body || !body.name || !body.number) return res.status(400).send({ message: 'Content missing' })
 
@@ -77,11 +77,11 @@ app.post('/api/persons', (req, res, next) => {
       })
   })})
 
-app.delete('/api/persons/:id', (req, res) => Person.findByIdAndDelete(req.params.id)
-  .then(result => res.status(204).end())
+app.delete('/api/persons/:id', (req, res, next) => Person.findByIdAndDelete(req.params.id)
+  .then(() => res.status(204).end())
   .catch(err => next(err)))
 
-app.put('/api/persons/:id', (req, res, next) => {
+app.put('/api/persons/:id', (req, res) => {
   if(!req.body || !req.body.name || !req.body.number) return res.status(400).json({ message: 'Content missing' })
 
   const { name, number } = req.body

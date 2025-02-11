@@ -29,7 +29,7 @@ const personSchema = new mongoose.Schema({
     required: [true, 'Number is required'],
     trim: true,
     minLength: [8, 'Number should have at least 8 characters'],
-    validate: [(val) => /^\d{2,3}\-\d+$/.test(val), 'Malformed number']
+    validate: [(val) => /^\d{2,3}-\d+$/.test(val), 'Malformed number']
   }
 })
 

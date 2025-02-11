@@ -2,4 +2,4 @@
 
 https://fullstackopenphonebook-wga0.onrender.com/
 
-Exercises 3.1 - 3.21
+Exercises 3.1 - 3.22
