@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/67af6613a238025a4b244721
+Content-Type: application/json
+
+{
+  "title": "History of Blogs 2",
+  "author": "Jon James",
+  "url": "https://",
+  "likes": 30000
+}

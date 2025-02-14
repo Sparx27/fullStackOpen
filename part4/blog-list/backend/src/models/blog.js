@@ -18,7 +18,10 @@ const blogSchema = mongoose.Schema({
     trim: true,
     required: [true, 'URL is required']
   },
-  likes: Number
+  likes: {
+    type: Number,
+    default: 0
+  }
 })
 
 blogSchema.set('toJSON', {

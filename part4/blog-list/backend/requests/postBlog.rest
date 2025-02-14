@@ -2,8 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "History of Blogs 2",
+  "title": "Angular patterns",
   "author": "Jon James",
-  "url": "https://",
-  "likes": 30000
+  "url": "https://"
 }
