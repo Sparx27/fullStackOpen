@@ -5,6 +5,7 @@ const { MONGO_URI } = require('./src/utils/config.js')
 const { logInfo, logError, logRequest } = require('./src/utils/logger.js')
 const { unknownPath, errorsHandler } = require('./src/utils/middleware.js')
 const { blogsRouter } = require('./src/controllers/blogs.js')
+const usersRouter = require('./src/controllers/users.js')
 
 mongoose.set('strictQuery', false)
 mongoose.connect(MONGO_URI)
@@ -14,8 +15,11 @@ mongoose.connect(MONGO_URI)
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use(logRequest())
+if(process.env.NODE_ENV !== 'test') {
+  app.use(logRequest())
+}
 
+app.use('/api/users', usersRouter)
 app.use('/api/blogs', blogsRouter)
 
 app.use(unknownPath)
