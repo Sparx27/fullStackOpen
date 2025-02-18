@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBydWViYTEyMyIsImlkIjoiNjdiNGYwMjJkOGY2Yzc5MDMxMTEyOTY2IiwiaWF0IjoxNzM5OTExMjMxfQ.naBXAHPbsMTeKA4l_PN22qXW3FPdPgmQf_D8yuJ3TPk
 
 {
-  "title": "Angular patterns 2",
+  "title": "Angular patterns 77777777777777",
   "author": "Jon James",
   "url": "https://"
 }

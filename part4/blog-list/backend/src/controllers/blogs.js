@@ -1,6 +1,18 @@
 const blogsRouter = require('express').Router()
 const { User } = require('../../tests/utils/user_helper.js')
 const Blog = require('../models/blog.js')
+const { userExtractor } = require('../utils/middleware.js')
+
+blogsRouter.delete('/reset', async (req, res, next) => {
+  try {
+    await User.deleteMany({})
+    await Blog.deleteMany({})
+    res.end()
+  }
+  catch(err) {
+    next(err)
+  }
+})
 
 blogsRouter.get('/', async (req, res, next) => {
   try {
@@ -20,16 +32,17 @@ blogsRouter.get('/:id', (req, res, next) => Blog.findById(req.params.id)
   })
   .catch(err => next(err)))
 
-blogsRouter.post('/', async (req, res, next) => {
+blogsRouter.post('/', userExtractor, async (req, res, next) => {
   if(!req.body || Object.keys(req.body).length === 0) return res.status(404).json({ message: 'Content missing' })
 
-  const newBlog = new Blog(req.body)
-  const users = await User.find({})
-  newBlog.user = users[0]._id
+  const { loggedUser } = req
   try {
+    const newBlog = new Blog({ ...req.body, user: loggedUser._id })
     const result = await newBlog.save()
-    users[0].blogs = [...users[0].blogs, result._id]
-    await users[0].save()
+
+    loggedUser.blogs = [...loggedUser.blogs, result._id]
+    await loggedUser.save()
+
     res.status(201).json(result)
   }
   catch(err) {
@@ -37,30 +50,38 @@ blogsRouter.post('/', async (req, res, next) => {
   }
 })
 
-blogsRouter.delete('/:id', async (req, res, next) => {
+blogsRouter.delete('/:id', userExtractor, async (req, res, next) => {
   try {
+    const blog = await Blog.findById(req.params.id)
+    if(!blog) return res.status(404).json({ message: 'Blog not found' })
+
+    if(blog.user.toString() !== req.loggedUser.id) return res.status(401).json({ message: 'This blog can only be deleted by its owner' })
+
     await Blog.findByIdAndDelete(req.params.id)
-      ? res.status(204).end()
-      : res.status(404).json({ message: 'Blog not found' })
+    res.status(204).end()
   }
   catch(err) {
     next(err)
   }
 })
 
-blogsRouter.put('/:id', async (req, res, next) => {
+blogsRouter.put('/:id', userExtractor, async (req, res, next) => {
+  const { title, author, url, likes } = req.body
+  if(!title || !author || !url) return res.status(400).json({ message: 'Content missing' })
+
   try {
-    const { title, author, url, likes } = req.body
+    const blog = await Blog.findById(req.params.id)
+    if(!blog) return res.status(404).json({ message: 'Blog no found' })
+    if(blog.user.toString() !== req.loggedUser.id) {
+      return res.status(401).json({ message: 'This blog can only be edited by its owner' })
+    }
 
     const toUpdateBlog = { title, author, url, likes }
-
-    if(!title || !author || !url) return res.status(400).json({ message: 'Content missing' })
-
     const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, toUpdateBlog, {
       new: true,
       runValidators: true
     })
-    updatedBlog ? res.json(updatedBlog) : res.status(404).json({ message: 'Blog not found' })
+    res.json(updatedBlog)
   }
   catch(err) {
     next(err)

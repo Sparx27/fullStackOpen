@@ -1,5 +1,6 @@
-PUT http://localhost:3003/api/blogs/67af6613a238025a4b244721
+PUT http://localhost:3003/api/blogs/67b4f052d8f6c7903111296d
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzdWFyaW8xIiwiaWQiOiI2N2I0ZjAzMmQ4ZjZjNzkwMzExMTI5NjgiLCJpYXQiOjE3Mzk5MTIzMjF9.-n7bThxNfZ4yOQLJjp-LcT4PXeALZa6rEHXuykiThhM
 
 {
   "title": "History of Blogs 2",
