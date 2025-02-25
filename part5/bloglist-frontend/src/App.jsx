@@ -9,17 +9,42 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
-    getAllBlogs().then(blogs => setBlogs(blogs))  
+    getAllBlogs().then(blogs => {
+      blogs = blogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(blogs)
+    })
   }, [])
+
+  function addBlog(newBlog) {
+    setBlogs([...blogs, newBlog])
+  }
+
+  function updateBlogs(updateBlog) {
+    setBlogs(blogs.map(b => b.id === updateBlog.id ? updateBlog : b))
+  }
+
+  function deleteBlog(deleteBlog) {
+    setBlogs(blogs.filter(b => b.id !== deleteBlog.id))
+  }
+
+  const blogsActions = {
+    addBlog,
+    updateBlogs,
+    deleteBlog
+  }
 
   return (
     <div>
       {
-        user == null
+        user === null
           ? <LoginForm setUser={setUser} />
           : (
             <>
-              <Blogs blogs={blogs} setBlogs={setBlogs} user={user} setUser={setUser} /> 
+              <Blogs
+                blogs={blogs}
+                user={user}
+                blogsActions={blogsActions}
+                setUser={setUser} />
             </>
           )
       }

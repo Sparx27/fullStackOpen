@@ -43,6 +43,8 @@ blogsRouter.post('/', userExtractor, async (req, res, next) => {
     loggedUser.blogs = [...loggedUser.blogs, result._id]
     await loggedUser.save()
 
+    await result.populate('user', { username: 1, name: 1, id: 1 })
+
     res.status(201).json(result)
   }
   catch(err) {
@@ -55,7 +57,8 @@ blogsRouter.delete('/:id', userExtractor, async (req, res, next) => {
     const blog = await Blog.findById(req.params.id)
     if(!blog) return res.status(404).json({ message: 'Blog not found' })
 
-    if(blog.user.toString() !== req.loggedUser.id) return res.status(401).json({ message: 'This blog can only be deleted by its owner' })
+    if(blog.user.toString() !== req.loggedUser.id)
+      return res.status(401).json({ message: 'This blog can only be deleted by its owner' })
 
     await Blog.findByIdAndDelete(req.params.id)
     res.status(204).end()
@@ -81,6 +84,7 @@ blogsRouter.put('/:id', userExtractor, async (req, res, next) => {
       new: true,
       runValidators: true
     })
+    await updatedBlog.populate('user', { username: 1, name: 1, id: 1 })
     res.json(updatedBlog)
   }
   catch(err) {

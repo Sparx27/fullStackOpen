@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { login } from '../services/user'
-import ErrMessage from './ErrMessage'
+import AlertMessage from './AlertMessage'
 
 const LoginForm = ({ setUser }) => {
   const timeoutRef = useRef(null)
@@ -39,22 +39,22 @@ const LoginForm = ({ setUser }) => {
     <form onSubmit={handleLogin}>
       <h2>Login</h2>
       {
-        errMessage && <ErrMessage message={errMessage} />
+        errMessage && <AlertMessage message={errMessage} type={'error'} />
       }
-      <input 
-        style={{display: 'block', marginBottom: '15px'}}
+      <input
+        style={{ display: 'block', marginBottom: '15px' }}
         type="text"
         value={username}
         onChange={e => setUsername(e.target.value)}
         placeholder='Username' />
-      <input 
-        style={{display: 'block', marginBottom: '15px'}}
+      <input
+        style={{ display: 'block', marginBottom: '15px' }}
         type="password"
         value={userPass}
         onChange={e => setUserPass(e.target.value)}
         placeholder='Password' />
 
-      <input style={{display: 'block'}} type="submit" value='Login' />
+      <input style={{ display: 'block' }} type="submit" value='Login' />
     </form>
   )
 }
