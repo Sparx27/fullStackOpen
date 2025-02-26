@@ -1,0 +1,1 @@
+## Solution of exercises 6.1 - 6.8
