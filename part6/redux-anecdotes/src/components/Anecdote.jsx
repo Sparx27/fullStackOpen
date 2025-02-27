@@ -1,5 +1,5 @@
 const Anecdote = ({ anecdote, fVote }) => {
-  const { id, content, votes } = anecdote
+  const { content, votes } = anecdote
 
   return (
     <div>
@@ -8,7 +8,7 @@ const Anecdote = ({ anecdote, fVote }) => {
       </div>
       <div>
         has {votes}
-        <button onClick={() => fVote(id)}>vote</button>
+        <button onClick={() => fVote(anecdote)}>vote</button>
       </div>
     </div>
   )
