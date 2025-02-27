@@ -2,18 +2,26 @@ import { useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { addnewAnecdote } from '../redux/reducers/anecdotesSlice'
 import { setNotification } from '../redux/reducers/notificationSlice'
+import { createOne } from '../services/anecdotes_api'
 
 const AnecdoteForm = ({ onNotification }) => {
   const dispatch = useDispatch()
 
   const contentRef = useRef(null)
 
-  function onAdd(e) {
+  async function onAdd(e) {
     e.preventDefault()
-    dispatch(addnewAnecdote(contentRef.current.value))
-    e.target.reset()
-    dispatch(setNotification('Anecdote created'))
-    onNotification()
+
+    try {
+      const returnedAnecdote = await createOne(contentRef.current.value)
+      dispatch(addnewAnecdote(returnedAnecdote))
+      e.target.reset()
+      dispatch(setNotification('Anecdote created'))
+      onNotification()
+    }
+    catch(err) {
+      console.log(err)
+    }
   }
 
   return (

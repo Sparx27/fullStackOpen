@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Anecdote from './Anecdote'
 import { voteAnecdote } from '../redux/reducers/anecdotesSlice'
 import { setNotification } from '../redux/reducers/notificationSlice'
+import { fetchVoteAnecdote } from '../services/anecdotes_api'
 
 const AnecdoteList = ({ onNotification }) => {
   const anecdotes = useSelector(state => {
@@ -10,11 +11,17 @@ const AnecdoteList = ({ onNotification }) => {
   })
   const dispatch = useDispatch()
 
-  function fVote(anecdote) {
-    const { id, content } = anecdote
-    dispatch(voteAnecdote(id))
-    dispatch(setNotification(`You voted '${content}'`))
-    onNotification()
+  async function fVote(anecdote) {
+    const { content } = anecdote
+    try {
+      const res = await fetchVoteAnecdote(anecdote)
+      dispatch(voteAnecdote(res))
+      dispatch(setNotification(`You voted '${content}'`))
+      onNotification()
+    }
+    catch(err) {
+      console.log(err)
+    }
   }
 
   return (
