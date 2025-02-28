@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import React from 'react'
 import { voteAnecdote } from '../services/anecdotes_api'
+import { useNotificationContext } from '../context/useNotificationContext'
 
 const AnecdoteList = ({ anecdotes, isLoading }) => {
+  const { setNotification } = useNotificationContext()
   const queryClient = useQueryClient()
 
   const voteAnecdoteMutation = useMutation({
@@ -17,6 +19,7 @@ const AnecdoteList = ({ anecdotes, isLoading }) => {
   })
   const handleVote = (anecdote) => {
     voteAnecdoteMutation.mutate(anecdote)
+    setNotification({ message: `anecdote '${anecdote.content}' voted` })
   }
 
   return (
@@ -24,7 +27,7 @@ const AnecdoteList = ({ anecdotes, isLoading }) => {
       {
         isLoading
           ? <p>Loading anecdotes</p>
-          : anecdotes.map(anecdote =>
+          : anecdotes?.length > 0 && anecdotes.map(anecdote =>
             <div key={anecdote.id} style={{ marginBottom: "15px" }}>
               <div>
                 {anecdote.content}

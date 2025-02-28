@@ -1,1 +1,1 @@
-## Solution of exercises 6.1 - 6.22
+## Solution of exercises 6.1 - 6.24
