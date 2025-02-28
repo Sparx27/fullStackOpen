@@ -15,11 +15,16 @@ const AnecdoteList = ({ anecdotes, isLoading }) => {
           .map(a => a.id === votedAnecdote.id ? votedAnecdote : a)
           .sort((a,b) => b.votes - a.votes)
       })
+      setNotification({ message: `anecdote '${votedAnecdote.content}' voted` })
+    },
+    onError: (res) => {
+      const error =
+        res.response?.data?.error || res.message || "Something went wrong";
+      setNotification({ message: error, type: "error" });
     }
   })
   const handleVote = (anecdote) => {
     voteAnecdoteMutation.mutate(anecdote)
-    setNotification({ message: `anecdote '${anecdote.content}' voted` })
   }
 
   return (
