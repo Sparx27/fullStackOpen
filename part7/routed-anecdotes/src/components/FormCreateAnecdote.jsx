@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useField } from '../hooks'
 
 const FormCreateAnecdote = ({ anecdotes, setAnecdotes, setNotification }) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
 
   const navigate = useNavigate()
 
@@ -22,6 +22,16 @@ const FormCreateAnecdote = ({ anecdotes, setAnecdotes, setNotification }) => {
     navigate('/')
   }
 
+  function onReset() {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
+  function excludeReset({ reset, ...props }) {
+    return props
+  }
+
   const formControlStyle = {
     width: '100%',
     display: 'grid',
@@ -35,17 +45,18 @@ const FormCreateAnecdote = ({ anecdotes, setAnecdotes, setNotification }) => {
       <form onSubmit={handleSubmit} style={{ width: '500px' }}>
         <div style={formControlStyle}>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input name='content' {...excludeReset(content)} />
         </div>
         <div style={formControlStyle}>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input name='author' {...excludeReset(author)} />
         </div>
         <div style={formControlStyle}>
           url for more info
-          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input name='info' {...excludeReset(info)} />
         </div>
         <button>create</button>
+        <button type='button' onClick={onReset}>reset</button>
       </form>
     </div>
   )

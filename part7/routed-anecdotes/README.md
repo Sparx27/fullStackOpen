@@ -1,1 +1,1 @@
-## Solution of exercises 7.1 - 7.3
+## Solution of exercises 7.1 - 7.6
