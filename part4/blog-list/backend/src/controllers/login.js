@@ -7,6 +7,9 @@ const { SECRET } = require('../utils/config.js')
 loginRouter.post('/', async (req, res, next) => {
   try {
     const { username, password } = req.body
+
+    if(!username || !password) return res.status(400).json({ message: 'Username and password required' })
+
     const user = await User.findOne({ username })
     const correctPass = user === null
       ? false
